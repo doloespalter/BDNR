@@ -5,6 +5,8 @@ class NotificationsController < ApplicationController
   # GET /notifications.json
   def index
     @notifications = Notification.all
+    length = Rails.cache.fetch("total") { Notification.all.count }
+    @length = length
   end
 
   # GET /notifications/1
@@ -21,7 +23,6 @@ class NotificationsController < ApplicationController
   def edit
   end
 
-  # POST /notifications
   # POST /notifications.json
   def create
     @notification = Notification.new(notification_params)
@@ -30,6 +31,7 @@ class NotificationsController < ApplicationController
       if @notification.save
         format.html { redirect_to @notification, notice: 'Notification was successfully created.' }
         format.json { render :show, status: :created, location: @notification }
+        Rails.cache.write("total", Notification.all.count)
       else
         format.html { render :new }
         format.json { render json: @notification.errors, status: :unprocessable_entity }
