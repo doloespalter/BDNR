@@ -5,7 +5,11 @@ class NotificationsController < ApplicationController
   # GET /notifications.json
   def index
     @notifications = Notification.all
-    length = Rails.cache.fetch("total") { Notification.all.count }
+    length = Rails.cache.fetch("total")
+    if length.nil?
+      length = Notification.all.length
+      Rails.cache.write("total", length)
+    end
     @length = length
   end
 
