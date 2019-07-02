@@ -2,7 +2,7 @@ class Notification
   include Mongoid::Document
   field :title, type: String
   field :body, type: String
-  field :link, type: String
-  field :images, type: String
-  field :videos, type: String
+  field :targets, type: String
+  field :sound, type: String
+  field :date, type: String
 end
